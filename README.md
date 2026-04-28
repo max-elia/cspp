@@ -111,6 +111,16 @@ pnpm dev
 
 Open `http://localhost:5173`. The frontend talks to the backend at `http://127.0.0.1:8000` by default. Override it with `PUBLIC_API_BASE_URL` if needed.
 
+## Screenshots
+
+Create a new instance and inspect the generated clustering before running the solver:
+
+![Web app new instance clustering](docs/images/webapp-new-instance-clustering.png)
+
+Track a running solve with stage progress, runtime estimates, and live optimization charts:
+
+![Web app solver progress](docs/images/webapp-solver-progress-running.png)
+
 ## Repository Layout
 
 - `src/run.py`: public CLI entrypoint.
