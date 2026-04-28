@@ -44,14 +44,14 @@ The supported public input format is a single JSON instance payload. See:
 
 - [`docs/instance-format.md`](docs/instance-format.md)
 - [`schemas/instance-payload.schema.json`](schemas/instance-payload.schema.json)
-- [`sample-data/synthetic_demo/instance_payload.json`](sample-data/synthetic_demo/instance_payload.json)
+- [`sample-data/demo/instance_payload.json`](sample-data/demo/instance_payload.json)
 - [`docs/thesis.pdf`](docs/thesis.pdf)
 
 Import the bundled sample:
 
 ```bash
 source init_env.sh
-python3 src/run.py import-instance sample-data/synthetic_demo/instance_payload.json --run-name sample
+python3 src/run.py import-instance sample-data/demo/instance_payload.json --run-name sample
 ```
 
 ## Run From CLI
@@ -73,7 +73,7 @@ Or import and solve in one command:
 
 ```bash
 python3 src/run.py run all full \
-  --instance-payload sample-data/synthetic_demo/instance_payload.json \
+  --instance-payload sample-data/demo/instance_payload.json \
   --run-name sample
 ```
 
@@ -119,9 +119,9 @@ Open `http://localhost:5173`. The frontend talks to the backend at `http://127.0
 - `src/clustering/`: public clustering methods.
 - `src/webserver.py` and `src/webserver_backend/`: FastAPI backend.
 - `web-app/`: SvelteKit frontend.
-- `sample-data/`: synthetic public sample instance.
+- `sample-data/`: demo sample instance.
 - `docs/` and `schemas/`: input format documentation.
 
 ## Notes
 
-The sample data is synthetic and intended for smoke tests and UI exploration. Full optimization runs require a working Gurobi installation and can take substantial time depending on instance size, scenario count, and hardware.
+The demo data is generated and intended for smoke tests and UI exploration. Full optimization runs require a working Gurobi installation and can take substantial time depending on instance size, scenario count, and hardware.

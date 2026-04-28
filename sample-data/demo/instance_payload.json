@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "instance_id": "synthetic_demo_sample",
+  "instance_id": "demo_sample",
   "source_instance_id": null,
   "generated_at": "2026-04-24T11:41:58.359088+00:00",
   "max_distance_from_warehouse_km": 100.0,
