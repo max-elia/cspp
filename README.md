@@ -2,6 +2,8 @@
 
 This repository contains the public code for a three-stage charging station planning pipeline and its web app.
 
+Thesis PDF: [`thesis.pdf`](thesis.pdf)
+
 Pipeline stages:
 
 1. **Cluster solve**: solve first-stage charger decisions on customer clusters.
@@ -45,7 +47,7 @@ The supported public input format is a single JSON instance payload. See:
 - [`docs/instance-format.md`](docs/instance-format.md)
 - [`schemas/instance-payload.schema.json`](schemas/instance-payload.schema.json)
 - [`sample-data/demo/instance_payload.json`](sample-data/demo/instance_payload.json)
-- [`docs/thesis.pdf`](docs/thesis.pdf)
+- [`thesis.pdf`](thesis.pdf)
 
 Import the bundled sample:
 
