@@ -45,6 +45,7 @@ The supported public input format is a single JSON instance payload. See:
 - [`docs/instance-format.md`](docs/instance-format.md)
 - [`schemas/instance-payload.schema.json`](schemas/instance-payload.schema.json)
 - [`sample-data/public_starnberg_100km/instance_payload.json`](sample-data/public_starnberg_100km/instance_payload.json)
+- [`docs/thesis.pdf`](docs/thesis.pdf)
 
 Import the bundled sample:
 
