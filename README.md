@@ -44,14 +44,14 @@ The supported public input format is a single JSON instance payload. See:
 
 - [`docs/instance-format.md`](docs/instance-format.md)
 - [`schemas/instance-payload.schema.json`](schemas/instance-payload.schema.json)
-- [`sample-data/public_starnberg_100km/instance_payload.json`](sample-data/public_starnberg_100km/instance_payload.json)
+- [`sample-data/synthetic_demo/instance_payload.json`](sample-data/synthetic_demo/instance_payload.json)
 - [`docs/thesis.pdf`](docs/thesis.pdf)
 
 Import the bundled sample:
 
 ```bash
 source init_env.sh
-python3 src/run.py import-instance sample-data/public_starnberg_100km/instance_payload.json --run-name sample
+python3 src/run.py import-instance sample-data/synthetic_demo/instance_payload.json --run-name sample
 ```
 
 ## Run From CLI
@@ -73,7 +73,7 @@ Or import and solve in one command:
 
 ```bash
 python3 src/run.py run all full \
-  --instance-payload sample-data/public_starnberg_100km/instance_payload.json \
+  --instance-payload sample-data/synthetic_demo/instance_payload.json \
   --run-name sample
 ```
 
