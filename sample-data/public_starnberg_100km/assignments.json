@@ -1,0 +1,246 @@
+{
+  "updated_at": "2026-04-24T11:41:58.359088+00:00",
+  "instance_id": "public_starnberg_100km_sample",
+  "assignments": [
+    {
+      "client_num": 1,
+      "customer_id": "PUB-0001",
+      "cluster_id": 0
+    },
+    {
+      "client_num": 2,
+      "customer_id": "PUB-0002",
+      "cluster_id": 2
+    },
+    {
+      "client_num": 3,
+      "customer_id": "PUB-0003",
+      "cluster_id": 1
+    },
+    {
+      "client_num": 4,
+      "customer_id": "PUB-0004",
+      "cluster_id": 1
+    },
+    {
+      "client_num": 5,
+      "customer_id": "PUB-0005",
+      "cluster_id": 0
+    },
+    {
+      "client_num": 6,
+      "customer_id": "PUB-0006",
+      "cluster_id": 1
+    },
+    {
+      "client_num": 7,
+      "customer_id": "PUB-0007",
+      "cluster_id": 2
+    },
+    {
+      "client_num": 8,
+      "customer_id": "PUB-0008",
+      "cluster_id": 0
+    },
+    {
+      "client_num": 9,
+      "customer_id": "PUB-0009",
+      "cluster_id": 1
+    },
+    {
+      "client_num": 10,
+      "customer_id": "PUB-0010",
+      "cluster_id": 2
+    },
+    {
+      "client_num": 11,
+      "customer_id": "PUB-0011",
+      "cluster_id": 1
+    },
+    {
+      "client_num": 12,
+      "customer_id": "PUB-0012",
+      "cluster_id": 0
+    },
+    {
+      "client_num": 13,
+      "customer_id": "PUB-0013",
+      "cluster_id": 0
+    },
+    {
+      "client_num": 14,
+      "customer_id": "PUB-0014",
+      "cluster_id": 2
+    },
+    {
+      "client_num": 15,
+      "customer_id": "PUB-0015",
+      "cluster_id": 2
+    },
+    {
+      "client_num": 16,
+      "customer_id": "PUB-0016",
+      "cluster_id": 0
+    },
+    {
+      "client_num": 17,
+      "customer_id": "PUB-0017",
+      "cluster_id": 2
+    },
+    {
+      "client_num": 18,
+      "customer_id": "PUB-0018",
+      "cluster_id": 1
+    },
+    {
+      "client_num": 19,
+      "customer_id": "PUB-0019",
+      "cluster_id": 1
+    },
+    {
+      "client_num": 20,
+      "customer_id": "PUB-0020",
+      "cluster_id": 1
+    },
+    {
+      "client_num": 21,
+      "customer_id": "PUB-0021",
+      "cluster_id": 0
+    },
+    {
+      "client_num": 22,
+      "customer_id": "PUB-0022",
+      "cluster_id": 0
+    },
+    {
+      "client_num": 23,
+      "customer_id": "PUB-0023",
+      "cluster_id": 0
+    },
+    {
+      "client_num": 24,
+      "customer_id": "PUB-0024",
+      "cluster_id": 1
+    },
+    {
+      "client_num": 25,
+      "customer_id": "PUB-0025",
+      "cluster_id": 1
+    },
+    {
+      "client_num": 26,
+      "customer_id": "PUB-0026",
+      "cluster_id": 1
+    },
+    {
+      "client_num": 27,
+      "customer_id": "PUB-0027",
+      "cluster_id": 2
+    },
+    {
+      "client_num": 28,
+      "customer_id": "PUB-0028",
+      "cluster_id": 1
+    },
+    {
+      "client_num": 29,
+      "customer_id": "PUB-0029",
+      "cluster_id": 2
+    },
+    {
+      "client_num": 30,
+      "customer_id": "PUB-0030",
+      "cluster_id": 2
+    },
+    {
+      "client_num": 31,
+      "customer_id": "PUB-0031",
+      "cluster_id": 2
+    },
+    {
+      "client_num": 32,
+      "customer_id": "PUB-0032",
+      "cluster_id": 2
+    },
+    {
+      "client_num": 33,
+      "customer_id": "PUB-0033",
+      "cluster_id": 2
+    },
+    {
+      "client_num": 34,
+      "customer_id": "PUB-0034",
+      "cluster_id": 0
+    },
+    {
+      "client_num": 35,
+      "customer_id": "PUB-0035",
+      "cluster_id": 2
+    },
+    {
+      "client_num": 36,
+      "customer_id": "PUB-0036",
+      "cluster_id": 0
+    },
+    {
+      "client_num": 37,
+      "customer_id": "PUB-0037",
+      "cluster_id": 0
+    },
+    {
+      "client_num": 38,
+      "customer_id": "PUB-0038",
+      "cluster_id": 2
+    },
+    {
+      "client_num": 39,
+      "customer_id": "PUB-0039",
+      "cluster_id": 2
+    },
+    {
+      "client_num": 40,
+      "customer_id": "PUB-0040",
+      "cluster_id": 0
+    },
+    {
+      "client_num": 41,
+      "customer_id": "PUB-0041",
+      "cluster_id": 1
+    },
+    {
+      "client_num": 42,
+      "customer_id": "PUB-0042",
+      "cluster_id": 0
+    },
+    {
+      "client_num": 43,
+      "customer_id": "PUB-0043",
+      "cluster_id": 2
+    },
+    {
+      "client_num": 44,
+      "customer_id": "PUB-0044",
+      "cluster_id": 0
+    },
+    {
+      "client_num": 45,
+      "customer_id": "PUB-0045",
+      "cluster_id": 1
+    },
+    {
+      "client_num": 46,
+      "customer_id": "PUB-0046",
+      "cluster_id": 1
+    },
+    {
+      "client_num": 47,
+      "customer_id": "PUB-0047",
+      "cluster_id": 0
+    },
+    {
+      "client_num": 48,
+      "customer_id": "PUB-0048",
+      "cluster_id": 1
+    }
+  ]
+}

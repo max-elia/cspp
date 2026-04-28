@@ -1,0 +1,48 @@
+# OS and editor files
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+build/
+dist/
+
+# Environments and secrets
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+env/
+
+# Runtime outputs
+exports/
+var/
+logs/
+*.log
+
+# Frontend
+node_modules/
+web-app/node_modules/
+web-app/.svelte-kit/
+web-app/build/
+web-app/dist/
+web-app/.vite/
+
+# Solver scratch data
+*.lp
+*.mps
+*.sol
+*.mst
+gurobi.log

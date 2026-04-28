@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "runtimes": [
+    {
+      "id": "local",
+      "label": "Local",
+      "kind": "local",
+      "project_root": ".",
+      "export_root": "var/webserver/exports",
+      "activation_command": "source init_env.sh",
+      "prepare_commands": [],
+      "poll_interval_sec": 10,
+      "source_sync_path": "src/",
+      "tags": [
+        "default"
+      ]
+    }
+  ]
+}

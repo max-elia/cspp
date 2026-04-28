@@ -1,0 +1,126 @@
+# CSPP
+
+This repository contains the public code for a three-stage charging station planning pipeline and its web app.
+
+Pipeline stages:
+
+1. **Cluster solve**: solve first-stage charger decisions on customer clusters.
+2. **Scenario evaluation**: evaluate the combined first-stage solution on demand scenarios.
+3. **Cluster reoptimization**: iteratively improve cluster-level charger decisions.
+
+The repository intentionally excludes private raw delivery data, thesis sources, full-instance evaluation experiments, and alternative reoptimization method variants.
+
+## Requirements
+
+- Python 3.11 or newer
+- Gurobi with a valid local license
+- Node.js 20 or newer
+- pnpm 9 or newer
+
+Set `GRB_LICENSE_FILE` if Gurobi does not find your license automatically:
+
+```bash
+export GRB_LICENSE_FILE=/path/to/gurobi.lic
+```
+
+Install Python dependencies:
+
+```bash
+python3 -m venv .venv
+source init_env.sh
+pip install -r requirements.txt
+```
+
+Install web-app dependencies:
+
+```bash
+cd web-app
+pnpm install
+```
+
+## Instance Data
+
+The supported public input format is a single JSON instance payload. See:
+
+- [`docs/instance-format.md`](docs/instance-format.md)
+- [`schemas/instance-payload.schema.json`](schemas/instance-payload.schema.json)
+- [`sample-data/public_starnberg_100km/instance_payload.json`](sample-data/public_starnberg_100km/instance_payload.json)
+
+Import the bundled sample:
+
+```bash
+source init_env.sh
+python3 src/run.py import-instance sample-data/public_starnberg_100km/instance_payload.json --run-name sample
+```
+
+## Run From CLI
+
+List available public stages:
+
+```bash
+source init_env.sh
+python3 src/run.py list
+```
+
+Run the full pipeline on an imported instance:
+
+```bash
+python3 src/run.py run all full --run-name sample
+```
+
+Or import and solve in one command:
+
+```bash
+python3 src/run.py run all full \
+  --instance-payload sample-data/public_starnberg_100km/instance_payload.json \
+  --run-name sample
+```
+
+Useful flags:
+
+- `--clustering-method {geographic,angular_slices,angular_slices_store_count,tour_containment}`
+- `--vehicle-type {mercedes,volvo}`
+- `--scenarios-to-use <n>`
+- `--num-customers <n>` for small smoke runs
+- `--second-stage-eval-timelimit <seconds>`
+- `--second-stage-eval-mipgap <gap>`
+- `--reopt-eval-mipgap <gap>`
+- `--debug`
+
+Outputs are written to `exports/runs/<run-name>/`.
+
+## Run The Web App
+
+The web app uses a FastAPI backend plus a SvelteKit frontend.
+
+Start the backend:
+
+```bash
+source init_env.sh
+cd src
+uvicorn webserver:app --reload
+```
+
+Start the frontend in another terminal:
+
+```bash
+cd web-app
+pnpm dev
+```
+
+Open `http://localhost:5173`. The frontend talks to the backend at `http://127.0.0.1:8000` by default. Override it with `PUBLIC_API_BASE_URL` if needed.
+
+## Repository Layout
+
+- `src/run.py`: public CLI entrypoint.
+- `src/instance_payload.py`: instance-payload validation/import.
+- `src/cspp/`: three-stage CSPP solver implementation.
+- `src/clustering/`: public clustering methods.
+- `src/webserver.py` and `src/webserver_backend/`: FastAPI backend.
+- `web-app/`: SvelteKit frontend.
+- `sample-data/`: synthetic public sample instance.
+- `docs/` and `schemas/`: input format documentation.
+
+## Notes
+
+The sample data is synthetic and intended for smoke tests and UI exploration. Full optimization runs require a working Gurobi installation and can take substantial time depending on instance size, scenario count, and hardware.

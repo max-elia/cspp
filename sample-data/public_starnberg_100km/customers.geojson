@@ -1,0 +1,1109 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.606205,
+          48.067248
+        ]
+      },
+      "properties": {
+        "client_num": 1,
+        "customer_id": "PUB-0001",
+        "customer_name": "Sample Store 001",
+        "address": "Seestrasse 189",
+        "postal_code": "83037",
+        "city": "Starnberg",
+        "total_demand": 41159.8,
+        "max_demand": 6427.0,
+        "nonzero_days": 15,
+        "latest_demand": 3800.0,
+        "cluster_id": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.31566,
+          48.729522
+        ]
+      },
+      "properties": {
+        "client_num": 2,
+        "customer_id": "PUB-0002",
+        "customer_name": "Sample Store 002",
+        "address": "Bahnhofstrasse 29",
+        "postal_code": "85003",
+        "city": "Herrsching",
+        "total_demand": 33080.5,
+        "max_demand": 8379.6,
+        "nonzero_days": 15,
+        "latest_demand": 1076.2,
+        "cluster_id": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.167129,
+          47.420366
+        ]
+      },
+      "properties": {
+        "client_num": 3,
+        "customer_id": "PUB-0003",
+        "customer_name": "Sample Store 003",
+        "address": "Gewerbering 170",
+        "postal_code": "85427",
+        "city": "Tutzing",
+        "total_demand": 15722.4,
+        "max_demand": 2783.4,
+        "nonzero_days": 20,
+        "latest_demand": 888.7,
+        "cluster_id": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.015458,
+          47.200179
+        ]
+      },
+      "properties": {
+        "client_num": 4,
+        "customer_id": "PUB-0004",
+        "customer_name": "Sample Store 004",
+        "address": "Industriestrasse 77",
+        "postal_code": "83789",
+        "city": "Wolfratshausen",
+        "total_demand": 28716.5,
+        "max_demand": 3991.0,
+        "nonzero_days": 23,
+        "latest_demand": 501.9,
+        "cluster_id": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.495088,
+          47.593365
+        ]
+      },
+      "properties": {
+        "client_num": 5,
+        "customer_id": "PUB-0005",
+        "customer_name": "Sample Store 005",
+        "address": "Hauptstrasse 32",
+        "postal_code": "86160",
+        "city": "Weilheim",
+        "total_demand": 4687.5,
+        "max_demand": 1809.5,
+        "nonzero_days": 10,
+        "latest_demand": 951.3,
+        "cluster_id": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.047421,
+          47.298214
+        ]
+      },
+      "properties": {
+        "client_num": 6,
+        "customer_id": "PUB-0006",
+        "customer_name": "Sample Store 006",
+        "address": "Muenchner Strasse 88",
+        "postal_code": "85397",
+        "city": "Murnau",
+        "total_demand": 17478.3,
+        "max_demand": 2919.6,
+        "nonzero_days": 20,
+        "latest_demand": 1478.5,
+        "cluster_id": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.979398,
+          48.401921
+        ]
+      },
+      "properties": {
+        "client_num": 7,
+        "customer_id": "PUB-0007",
+        "customer_name": "Sample Store 007",
+        "address": "Am Anger 51",
+        "postal_code": "83234",
+        "city": "Landsberg",
+        "total_demand": 76252.3,
+        "max_demand": 7746.1,
+        "nonzero_days": 24,
+        "latest_demand": 3108.9,
+        "cluster_id": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.482117,
+          48.155914
+        ]
+      },
+      "properties": {
+        "client_num": 8,
+        "customer_id": "PUB-0008",
+        "customer_name": "Sample Store 008",
+        "address": "Lindenweg 169",
+        "postal_code": "85321",
+        "city": "Fuerstenfeldbruck",
+        "total_demand": 85546.0,
+        "max_demand": 15637.6,
+        "nonzero_days": 15,
+        "latest_demand": 11906.1,
+        "cluster_id": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.821252,
+          47.309018
+        ]
+      },
+      "properties": {
+        "client_num": 9,
+        "customer_id": "PUB-0009",
+        "customer_name": "Sample Store 009",
+        "address": "Seestrasse 57",
+        "postal_code": "84301",
+        "city": "Dachau",
+        "total_demand": 4500.0,
+        "max_demand": 1697.9,
+        "nonzero_days": 11,
+        "latest_demand": 161.2,
+        "cluster_id": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.183037,
+          48.613013
+        ]
+      },
+      "properties": {
+        "client_num": 10,
+        "customer_id": "PUB-0010",
+        "customer_name": "Sample Store 010",
+        "address": "Bahnhofstrasse 176",
+        "postal_code": "86369",
+        "city": "Erding",
+        "total_demand": 4500.0,
+        "max_demand": 600.0,
+        "nonzero_days": 22,
+        "latest_demand": 293.7,
+        "cluster_id": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.533421,
+          47.291102
+        ]
+      },
+      "properties": {
+        "client_num": 11,
+        "customer_id": "PUB-0011",
+        "customer_name": "Sample Store 011",
+        "address": "Gewerbering 151",
+        "postal_code": "83011",
+        "city": "Freising",
+        "total_demand": 6655.1,
+        "max_demand": 746.5,
+        "nonzero_days": 21,
+        "latest_demand": 495.9,
+        "cluster_id": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.28454,
+          48.210544
+        ]
+      },
+      "properties": {
+        "client_num": 12,
+        "customer_id": "PUB-0012",
+        "customer_name": "Sample Store 012",
+        "address": "Industriestrasse 166",
+        "postal_code": "84018",
+        "city": "Rosenheim",
+        "total_demand": 12517.8,
+        "max_demand": 1705.1,
+        "nonzero_days": 28,
+        "latest_demand": 795.6,
+        "cluster_id": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.787045,
+          48.747618
+        ]
+      },
+      "properties": {
+        "client_num": 13,
+        "customer_id": "PUB-0013",
+        "customer_name": "Sample Store 013",
+        "address": "Hauptstrasse 183",
+        "postal_code": "83493",
+        "city": "Holzkirchen",
+        "total_demand": 202055.7,
+        "max_demand": 27458.3,
+        "nonzero_days": 27,
+        "latest_demand": 6570.9,
+        "cluster_id": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.298307,
+          48.745312
+        ]
+      },
+      "properties": {
+        "client_num": 14,
+        "customer_id": "PUB-0014",
+        "customer_name": "Sample Store 014",
+        "address": "Muenchner Strasse 83",
+        "postal_code": "84025",
+        "city": "Bad Toelz",
+        "total_demand": 114245.6,
+        "max_demand": 9560.8,
+        "nonzero_days": 23,
+        "latest_demand": 2572.8,
+        "cluster_id": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.388256,
+          48.384213
+        ]
+      },
+      "properties": {
+        "client_num": 15,
+        "customer_id": "PUB-0015",
+        "customer_name": "Sample Store 015",
+        "address": "Am Anger 56",
+        "postal_code": "85787",
+        "city": "Geretsried",
+        "total_demand": 36281.7,
+        "max_demand": 5794.5,
+        "nonzero_days": 13,
+        "latest_demand": 4335.1,
+        "cluster_id": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.49998,
+          48.299613
+        ]
+      },
+      "properties": {
+        "client_num": 16,
+        "customer_id": "PUB-0016",
+        "customer_name": "Sample Store 016",
+        "address": "Lindenweg 31",
+        "postal_code": "83083",
+        "city": "Penzberg",
+        "total_demand": 4500.0,
+        "max_demand": 792.2,
+        "nonzero_days": 20,
+        "latest_demand": 234.9,
+        "cluster_id": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.718322,
+          48.173977
+        ]
+      },
+      "properties": {
+        "client_num": 17,
+        "customer_id": "PUB-0017",
+        "customer_name": "Sample Store 017",
+        "address": "Seestrasse 154",
+        "postal_code": "82646",
+        "city": "Schongau",
+        "total_demand": 14616.5,
+        "max_demand": 1752.8,
+        "nonzero_days": 21,
+        "latest_demand": 1610.4,
+        "cluster_id": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.546249,
+          47.290108
+        ]
+      },
+      "properties": {
+        "client_num": 18,
+        "customer_id": "PUB-0018",
+        "customer_name": "Sample Store 018",
+        "address": "Bahnhofstrasse 184",
+        "postal_code": "83738",
+        "city": "Miesbach",
+        "total_demand": 77510.7,
+        "max_demand": 8557.0,
+        "nonzero_days": 20,
+        "latest_demand": 2314.7,
+        "cluster_id": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.011622,
+          47.218713
+        ]
+      },
+      "properties": {
+        "client_num": 19,
+        "customer_id": "PUB-0019",
+        "customer_name": "Sample Store 019",
+        "address": "Gewerbering 164",
+        "postal_code": "83805",
+        "city": "Ebersberg",
+        "total_demand": 4500.0,
+        "max_demand": 1479.6,
+        "nonzero_days": 8,
+        "latest_demand": 983.6,
+        "cluster_id": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.134564,
+          47.352394
+        ]
+      },
+      "properties": {
+        "client_num": 20,
+        "customer_id": "PUB-0020",
+        "customer_name": "Sample Store 020",
+        "address": "Industriestrasse 163",
+        "postal_code": "85345",
+        "city": "Augsburg",
+        "total_demand": 183230.6,
+        "max_demand": 32278.2,
+        "nonzero_days": 13,
+        "latest_demand": 30962.6,
+        "cluster_id": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.521527,
+          47.606751
+        ]
+      },
+      "properties": {
+        "client_num": 21,
+        "customer_id": "PUB-0021",
+        "customer_name": "Sample Store 021",
+        "address": "Hauptstrasse 85",
+        "postal_code": "82973",
+        "city": "Garmisch",
+        "total_demand": 1104015.5,
+        "max_demand": 186134.1,
+        "nonzero_days": 16,
+        "latest_demand": 100654.1,
+        "cluster_id": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.49597,
+          48.137859
+        ]
+      },
+      "properties": {
+        "client_num": 22,
+        "customer_id": "PUB-0022",
+        "customer_name": "Sample Store 022",
+        "address": "Muenchner Strasse 159",
+        "postal_code": "82868",
+        "city": "Moosburg",
+        "total_demand": 8991.8,
+        "max_demand": 1533.3,
+        "nonzero_days": 20,
+        "latest_demand": 222.4,
+        "cluster_id": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.061565,
+          48.481531
+        ]
+      },
+      "properties": {
+        "client_num": 23,
+        "customer_id": "PUB-0023",
+        "customer_name": "Sample Store 023",
+        "address": "Am Anger 32",
+        "postal_code": "82115",
+        "city": "Pfaffenhofen",
+        "total_demand": 56015.7,
+        "max_demand": 5497.3,
+        "nonzero_days": 20,
+        "latest_demand": 6469.1,
+        "cluster_id": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.415964,
+          47.659582
+        ]
+      },
+      "properties": {
+        "client_num": 24,
+        "customer_id": "PUB-0024",
+        "customer_name": "Sample Store 024",
+        "address": "Lindenweg 178",
+        "postal_code": "83223",
+        "city": "Aichach",
+        "total_demand": 305159.0,
+        "max_demand": 30485.8,
+        "nonzero_days": 26,
+        "latest_demand": 26349.6,
+        "cluster_id": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.95452,
+          47.652053
+        ]
+      },
+      "properties": {
+        "client_num": 25,
+        "customer_id": "PUB-0025",
+        "customer_name": "Sample Store 025",
+        "address": "Seestrasse 106",
+        "postal_code": "85231",
+        "city": "Starnberg",
+        "total_demand": 429976.2,
+        "max_demand": 74788.8,
+        "nonzero_days": 17,
+        "latest_demand": 60438.7,
+        "cluster_id": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.033431,
+          47.449825
+        ]
+      },
+      "properties": {
+        "client_num": 26,
+        "customer_id": "PUB-0026",
+        "customer_name": "Sample Store 026",
+        "address": "Bahnhofstrasse 73",
+        "postal_code": "84430",
+        "city": "Herrsching",
+        "total_demand": 87553.7,
+        "max_demand": 19895.8,
+        "nonzero_days": 14,
+        "latest_demand": 4297.8,
+        "cluster_id": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.752068,
+          48.608254
+        ]
+      },
+      "properties": {
+        "client_num": 27,
+        "customer_id": "PUB-0027",
+        "customer_name": "Sample Store 027",
+        "address": "Gewerbering 130",
+        "postal_code": "86970",
+        "city": "Tutzing",
+        "total_demand": 127566.9,
+        "max_demand": 17878.5,
+        "nonzero_days": 19,
+        "latest_demand": 9563.6,
+        "cluster_id": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.147075,
+          47.278942
+        ]
+      },
+      "properties": {
+        "client_num": 28,
+        "customer_id": "PUB-0028",
+        "customer_name": "Sample Store 028",
+        "address": "Industriestrasse 61",
+        "postal_code": "85084",
+        "city": "Wolfratshausen",
+        "total_demand": 71410.6,
+        "max_demand": 12342.3,
+        "nonzero_days": 21,
+        "latest_demand": 4988.6,
+        "cluster_id": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.066818,
+          47.75588
+        ]
+      },
+      "properties": {
+        "client_num": 29,
+        "customer_id": "PUB-0029",
+        "customer_name": "Sample Store 029",
+        "address": "Hauptstrasse 101",
+        "postal_code": "85149",
+        "city": "Weilheim",
+        "total_demand": 33432.3,
+        "max_demand": 4259.6,
+        "nonzero_days": 18,
+        "latest_demand": 1948.2,
+        "cluster_id": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.094883,
+          47.694175
+        ]
+      },
+      "properties": {
+        "client_num": 30,
+        "customer_id": "PUB-0030",
+        "customer_name": "Sample Store 030",
+        "address": "Muenchner Strasse 45",
+        "postal_code": "82567",
+        "city": "Murnau",
+        "total_demand": 23719.0,
+        "max_demand": 6361.8,
+        "nonzero_days": 15,
+        "latest_demand": 710.7,
+        "cluster_id": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.561351,
+          47.905411
+        ]
+      },
+      "properties": {
+        "client_num": 31,
+        "customer_id": "PUB-0031",
+        "customer_name": "Sample Store 031",
+        "address": "Am Anger 130",
+        "postal_code": "84419",
+        "city": "Landsberg",
+        "total_demand": 4500.0,
+        "max_demand": 600.0,
+        "nonzero_days": 26,
+        "latest_demand": 66.8,
+        "cluster_id": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.228262,
+          48.182593
+        ]
+      },
+      "properties": {
+        "client_num": 32,
+        "customer_id": "PUB-0032",
+        "customer_name": "Sample Store 032",
+        "address": "Lindenweg 93",
+        "postal_code": "85999",
+        "city": "Fuerstenfeldbruck",
+        "total_demand": 130787.0,
+        "max_demand": 22263.1,
+        "nonzero_days": 17,
+        "latest_demand": 5188.1,
+        "cluster_id": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.842614,
+          48.351943
+        ]
+      },
+      "properties": {
+        "client_num": 33,
+        "customer_id": "PUB-0033",
+        "customer_name": "Sample Store 033",
+        "address": "Seestrasse 127",
+        "postal_code": "82027",
+        "city": "Dachau",
+        "total_demand": 10398.5,
+        "max_demand": 1627.2,
+        "nonzero_days": 22,
+        "latest_demand": 643.1,
+        "cluster_id": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.682398,
+          47.973245
+        ]
+      },
+      "properties": {
+        "client_num": 34,
+        "customer_id": "PUB-0034",
+        "customer_name": "Sample Store 034",
+        "address": "Bahnhofstrasse 96",
+        "postal_code": "83212",
+        "city": "Erding",
+        "total_demand": 41771.2,
+        "max_demand": 3597.8,
+        "nonzero_days": 27,
+        "latest_demand": 1481.8,
+        "cluster_id": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.919877,
+          48.79118
+        ]
+      },
+      "properties": {
+        "client_num": 35,
+        "customer_id": "PUB-0035",
+        "customer_name": "Sample Store 035",
+        "address": "Gewerbering 163",
+        "postal_code": "83868",
+        "city": "Freising",
+        "total_demand": 4500.0,
+        "max_demand": 1031.2,
+        "nonzero_days": 15,
+        "latest_demand": 536.9,
+        "cluster_id": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.486038,
+          47.674631
+        ]
+      },
+      "properties": {
+        "client_num": 36,
+        "customer_id": "PUB-0036",
+        "customer_name": "Sample Store 036",
+        "address": "Industriestrasse 101",
+        "postal_code": "86703",
+        "city": "Rosenheim",
+        "total_demand": 4500.0,
+        "max_demand": 849.9,
+        "nonzero_days": 19,
+        "latest_demand": 352.6,
+        "cluster_id": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.255898,
+          48.469646
+        ]
+      },
+      "properties": {
+        "client_num": 37,
+        "customer_id": "PUB-0037",
+        "customer_name": "Sample Store 037",
+        "address": "Hauptstrasse 158",
+        "postal_code": "86344",
+        "city": "Holzkirchen",
+        "total_demand": 1102526.4,
+        "max_demand": 92187.2,
+        "nonzero_days": 27,
+        "latest_demand": 12585.5,
+        "cluster_id": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.223235,
+          48.151797
+        ]
+      },
+      "properties": {
+        "client_num": 38,
+        "customer_id": "PUB-0038",
+        "customer_name": "Sample Store 038",
+        "address": "Muenchner Strasse 2",
+        "postal_code": "82458",
+        "city": "Bad Toelz",
+        "total_demand": 44167.1,
+        "max_demand": 5761.6,
+        "nonzero_days": 14,
+        "latest_demand": 2790.9,
+        "cluster_id": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.043197,
+          48.54005
+        ]
+      },
+      "properties": {
+        "client_num": 39,
+        "customer_id": "PUB-0039",
+        "customer_name": "Sample Store 039",
+        "address": "Am Anger 38",
+        "postal_code": "83720",
+        "city": "Geretsried",
+        "total_demand": 5352.2,
+        "max_demand": 1189.8,
+        "nonzero_days": 15,
+        "latest_demand": 433.0,
+        "cluster_id": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.840154,
+          47.997859
+        ]
+      },
+      "properties": {
+        "client_num": 40,
+        "customer_id": "PUB-0040",
+        "customer_name": "Sample Store 040",
+        "address": "Lindenweg 85",
+        "postal_code": "82913",
+        "city": "Penzberg",
+        "total_demand": 88496.9,
+        "max_demand": 15723.4,
+        "nonzero_days": 16,
+        "latest_demand": 9927.1,
+        "cluster_id": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.786038,
+          47.792356
+        ]
+      },
+      "properties": {
+        "client_num": 41,
+        "customer_id": "PUB-0041",
+        "customer_name": "Sample Store 041",
+        "address": "Seestrasse 173",
+        "postal_code": "83203",
+        "city": "Schongau",
+        "total_demand": 49565.1,
+        "max_demand": 13178.9,
+        "nonzero_days": 14,
+        "latest_demand": 6390.9,
+        "cluster_id": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.693913,
+          48.397527
+        ]
+      },
+      "properties": {
+        "client_num": 42,
+        "customer_id": "PUB-0042",
+        "customer_name": "Sample Store 042",
+        "address": "Bahnhofstrasse 167",
+        "postal_code": "86638",
+        "city": "Miesbach",
+        "total_demand": 16115.8,
+        "max_demand": 1696.3,
+        "nonzero_days": 24,
+        "latest_demand": 1415.8,
+        "cluster_id": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.580213,
+          48.735503
+        ]
+      },
+      "properties": {
+        "client_num": 43,
+        "customer_id": "PUB-0043",
+        "customer_name": "Sample Store 043",
+        "address": "Gewerbering 69",
+        "postal_code": "86986",
+        "city": "Ebersberg",
+        "total_demand": 22072.4,
+        "max_demand": 6056.5,
+        "nonzero_days": 12,
+        "latest_demand": 433.2,
+        "cluster_id": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.456668,
+          47.579861
+        ]
+      },
+      "properties": {
+        "client_num": 44,
+        "customer_id": "PUB-0044",
+        "customer_name": "Sample Store 044",
+        "address": "Industriestrasse 143",
+        "postal_code": "83602",
+        "city": "Augsburg",
+        "total_demand": 4500.0,
+        "max_demand": 917.2,
+        "nonzero_days": 14,
+        "latest_demand": 342.9,
+        "cluster_id": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.801759,
+          47.764117
+        ]
+      },
+      "properties": {
+        "client_num": 45,
+        "customer_id": "PUB-0045",
+        "customer_name": "Sample Store 045",
+        "address": "Hauptstrasse 35",
+        "postal_code": "83723",
+        "city": "Garmisch",
+        "total_demand": 4500.0,
+        "max_demand": 600.0,
+        "nonzero_days": 23,
+        "latest_demand": 57.3,
+        "cluster_id": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.246333,
+          47.450306
+        ]
+      },
+      "properties": {
+        "client_num": 46,
+        "customer_id": "PUB-0046",
+        "customer_name": "Sample Store 046",
+        "address": "Muenchner Strasse 142",
+        "postal_code": "84408",
+        "city": "Moosburg",
+        "total_demand": 66742.8,
+        "max_demand": 6483.8,
+        "nonzero_days": 25,
+        "latest_demand": 2513.7,
+        "cluster_id": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.523649,
+          47.79636
+        ]
+      },
+      "properties": {
+        "client_num": 47,
+        "customer_id": "PUB-0047",
+        "customer_name": "Sample Store 047",
+        "address": "Am Anger 105",
+        "postal_code": "83746",
+        "city": "Pfaffenhofen",
+        "total_demand": 5098.7,
+        "max_demand": 861.1,
+        "nonzero_days": 22,
+        "latest_demand": 385.0,
+        "cluster_id": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.781028,
+          47.307229
+        ]
+      },
+      "properties": {
+        "client_num": 48,
+        "customer_id": "PUB-0048",
+        "customer_name": "Sample Store 048",
+        "address": "Lindenweg 48",
+        "postal_code": "84167",
+        "city": "Aichach",
+        "total_demand": 4500.0,
+        "max_demand": 896.2,
+        "nonzero_days": 21,
+        "latest_demand": 510.0,
+        "cluster_id": 1
+      }
+    }
+  ]
+}
