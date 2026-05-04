@@ -111,7 +111,11 @@ function classifyBucket(stats: ClusterStats): ClusterRuntimeBucket {
 }
 
 function computeClusterStats(instancePayload: Record<string, unknown>): ClusterStats[] {
-	const customers = Array.isArray(instancePayload.customers) ? instancePayload.customers : [];
+	const customers = Array.isArray(instancePayload.stores)
+		? instancePayload.stores
+		: Array.isArray(instancePayload.customers)
+			? instancePayload.customers
+			: [];
 	const demandRows = Array.isArray(instancePayload.demand_rows) ? instancePayload.demand_rows : [];
 	const warehouse =
 		instancePayload.warehouse && typeof instancePayload.warehouse === 'object'
@@ -219,7 +223,11 @@ export function estimatePipelineRuntimeFallbackSec(
 ): number | null {
 	if (!instancePayload || !selectedCores || selectedCores <= 0) return null;
 
-	const customers = Array.isArray(instancePayload.customers) ? instancePayload.customers : [];
+	const customers = Array.isArray(instancePayload.stores)
+		? instancePayload.stores
+		: Array.isArray(instancePayload.customers)
+			? instancePayload.customers
+			: [];
 	const demandRows = Array.isArray(instancePayload.demand_rows) ? instancePayload.demand_rows : [];
 	if (!customers.length || !demandRows.length) return null;
 

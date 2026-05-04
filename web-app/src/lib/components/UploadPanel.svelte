@@ -4,7 +4,7 @@
 	let { title = 'Upload Files', showHeader = true } = $props<{ title?: string; showHeader?: boolean }>();
 
 	let runId = $state('');
-	let kind = $state('customers');
+	let kind = $state('stores');
 	let instanceFile = $state<File | null>(null);
 	let folderFiles = $state<FileList | null>(null);
 	let uploadStatus = $state('');
@@ -60,7 +60,7 @@
 		<label>
 			<span>Kind</span>
 			<select bind:value={kind}>
-				<option value="customers">customers</option>
+				<option value="stores">stores</option>
 				<option value="demand_long">demand_long</option>
 				<option value="cluster_assignments">cluster_assignments</option>
 				<option value="frontend_manifest">frontend_manifest</option>

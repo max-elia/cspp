@@ -5,6 +5,6 @@ CSPP demo sample instance for GitHub demos. Store names, identifiers, addresses,
 - Seed: `20260424`
 - Stores: `48`
 - Demand rows: `1488`
-- Files: `instance_payload.json`, `assignments.json`, `customers.geojson`
+- Files: `instance_payload.json`, `assignments.json`, `stores.geojson`
 
-The `clustering_method` is set to `angular_slices` for pipeline compatibility. The included cluster IDs are demo angular sectors around the demo warehouse.
+The included cluster IDs are demo angular sectors around the demo warehouse. The public instance payload does not include a clustering method field.

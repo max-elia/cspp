@@ -102,7 +102,7 @@
 			<nav class="rail-section" aria-label="Instance views">
 				<div class="rail-heading">Instance</div>
 				<a href={instanceBase} class:active={isActive(instanceBase, true)} aria-current={isActive(instanceBase, true) ? 'page' : undefined}>Overview + Map</a>
-				<a href={`/instances/new?source=${encodeURIComponent(instanceId ?? '')}&step=customers`} class:active={isActive('/instances/new')}>Derive Instance</a>
+				<a href={`/instances/new?source=${encodeURIComponent(instanceId ?? '')}&step=stores`} class:active={isActive('/instances/new')}>Derive Instance</a>
 				<a href={`${instanceBase}/runs`} class:active={isActive(`${instanceBase}/runs`, !runId)} aria-current={isActive(`${instanceBase}/runs`, !runId) ? 'page' : undefined}>Runs</a>
 			</nav>
 

@@ -361,18 +361,24 @@ def _safe_text(value: object | None) -> str:
 
 
 def _configured_frontend_clustering_method(run_dir: Path) -> str | None:
-    def canonical(method: str) -> str:
+    def canonical(method: str) -> str | None:
         value = method.strip()
         if value.startswith("angular_gap") or value.startswith("angular_slices"):
             return "angular_slices"
         if value in {"kmeans", "depot_regularized_kmeans", "hierarchical_ward", "geographic"}:
             return "geographic"
-        return value
+        if value in {"tour_containment", "angular_slices_store_count"}:
+            return value
+        if value in {"manual", "predefined", "predefined_cluster_ids", "imported_bundle"}:
+            return None
+        return None
 
     payload = _read_instance_payload(run_dir)
     payload_method = payload.get("clustering_method")
     if isinstance(payload_method, str) and payload_method.strip():
-        return canonical(payload_method)
+        method = canonical(payload_method)
+        if method:
+            return method
     config = _read_json(run_dir / "run_config.json")
     configured = config.get("clustering_method")
     if isinstance(configured, str) and configured.strip():
@@ -423,14 +429,12 @@ def _write_wide_table(path: Path, columns: list[str], rows: list[dict[str, objec
 
 def _has_prepared_manual_clustering(run_dir: Path) -> bool:
     prep_root = run_dir / "prep" / "clustering"
-    return any(
-        path.exists()
-        for path in (
-            prep_root / "assignments.json",
-            prep_root / "cluster_assignments.json",
-            prep_root / "manual_assignments.json",
-        )
-    )
+    assignments_payload = _read_json(prep_root / "assignments.json")
+    if isinstance(assignments_payload.get("assignments"), list) and assignments_payload["assignments"]:
+        return True
+    if read_table_rows(prep_root / "cluster_assignments.json"):
+        return True
+    return bool(read_table_rows(prep_root / "manual_assignments.json"))
 
 
 def _ensure_clustering_inputs(run_dir: Path) -> None:
@@ -475,7 +479,9 @@ def _hydrate_instance_run_data(run_dir: Path) -> None:
     if all(path.exists() for path in required_files):
         return
     payload = _read_instance_payload(run_dir)
-    customers_raw = payload.get("customers")
+    customers_raw = payload.get("stores")
+    if not isinstance(customers_raw, list):
+        customers_raw = payload.get("customers")
     demand_rows_raw = payload.get("demand_rows")
     warehouse_raw = payload.get("warehouse")
     if not isinstance(customers_raw, list) or not isinstance(demand_rows_raw, list):
@@ -492,7 +498,7 @@ def _hydrate_instance_run_data(run_dir: Path) -> None:
         customers.append(
             {
                 "client_num": client_num,
-                "customer_id": _safe_text(row.get("customer_id") or client_num),
+                "customer_id": _safe_text(row.get("customer_id") or row.get("store_id") or client_num),
                 "latitude": latitude,
                 "longitude": longitude,
             }
@@ -662,19 +668,19 @@ def _pipeline_preflight(run_dir: Path, commands: list[tuple[str, list[str]]]) ->
     ]
     prepared_clustering_dir = run_dir / "prep" / "clustering"
     payload = _read_instance_payload(run_dir)
-    if not isinstance(payload.get("customers"), list) or not payload.get("customers"):
-        issues.append(f"missing instance payload customers: {run_dir / 'prep' / 'instance' / 'payload.json'}")
+    stores = payload.get("stores")
+    if not isinstance(stores, list):
+        stores = payload.get("customers")
+    if not isinstance(stores, list) or not stores:
+        issues.append(f"missing instance payload stores: {run_dir / 'prep' / 'instance' / 'payload.json'}")
     for path in cspp_required:
         if not path.exists():
             issues.append(f"missing CSPP input file: {path}")
-    if not any(
-        path.exists()
-        for path in (
-            prepared_clustering_dir / "assignments.json",
-            prepared_clustering_dir / "cluster_assignments.json",
-            run_dir / "04_clustering" / "data" / "cluster_assignments.json",
-        )
-    ):
+    assignments_payload = _read_json(prepared_clustering_dir / "assignments.json")
+    has_assignments = isinstance(assignments_payload.get("assignments"), list) and bool(assignments_payload["assignments"])
+    has_assignment_table = bool(read_table_rows(prepared_clustering_dir / "cluster_assignments.json"))
+    has_pipeline_assignment_table = bool(read_table_rows(run_dir / "04_clustering" / "data" / "cluster_assignments.json"))
+    if not (has_assignments or has_assignment_table or has_pipeline_assignment_table):
         issues.append(f"missing clustering assignments: {prepared_clustering_dir / 'assignments.json'}")
     return issues
 

@@ -233,12 +233,15 @@ export type FeatureCollection = {
 export type MapDemandRow = {
 	delivery_date: string;
 	client_num: number;
+	store_id?: string | null;
 	customer_id?: string | null;
 	demand_kg: number;
 };
 
 export type InstanceBundleCustomer = {
 	client_num: number;
+	store_id?: string | null;
+	store_name?: string | null;
 	customer_id?: string | null;
 	customer_name?: string | null;
 	street?: string | null;
@@ -263,12 +266,12 @@ export type InstanceBundle = {
 	generated_at?: string | null;
 	includes_clustering?: boolean | null;
 	max_distance_from_warehouse_km?: number | null;
-	clustering_method?: string | null;
 	warehouse?: {
 		latitude?: number | null;
 		longitude?: number | null;
 	} | null;
-	customers: InstanceBundleCustomer[];
+	stores: InstanceBundleCustomer[];
+	customers?: InstanceBundleCustomer[];
 	demand_rows: MapDemandRow[];
 };
 

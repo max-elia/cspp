@@ -41,11 +41,13 @@ def load_instance_payload(path: str | Path) -> dict[str, Any]:
     payload = json.loads(payload_path.read_text(encoding="utf-8"))
     if not isinstance(payload, dict):
         raise ValueError("instance payload must be a JSON object")
-    customers = payload.get("customers")
+    customers = payload.get("stores")
+    if not isinstance(customers, list):
+        customers = payload.get("customers")
     demand_rows = payload.get("demand_rows")
     warehouse = payload.get("warehouse")
     if not isinstance(customers, list) or not customers:
-        raise ValueError("customers must be a non-empty list")
+        raise ValueError("stores must be a non-empty list")
     if not isinstance(demand_rows, list):
         raise ValueError("demand_rows must be a list")
     if not isinstance(warehouse, dict) or _safe_float(warehouse.get("latitude")) is None or _safe_float(warehouse.get("longitude")) is None:
@@ -53,15 +55,15 @@ def load_instance_payload(path: str | Path) -> dict[str, Any]:
     seen: set[int] = set()
     for row in customers:
         if not isinstance(row, dict):
-            raise ValueError("each customer must be an object")
+            raise ValueError("each store must be an object")
         client_num = _safe_int(row.get("client_num"))
         if client_num is None or client_num <= 0:
-            raise ValueError("each customer needs a positive integer client_num")
+            raise ValueError("each store needs a positive integer client_num")
         if client_num in seen:
             raise ValueError(f"duplicate client_num: {client_num}")
         seen.add(client_num)
         if _safe_float(row.get("latitude")) is None or _safe_float(row.get("longitude")) is None:
-            raise ValueError(f"customer {client_num} needs latitude and longitude")
+            raise ValueError(f"store {client_num} needs latitude and longitude")
     for row in demand_rows:
         if not isinstance(row, dict):
             raise ValueError("each demand row must be an object")
@@ -73,29 +75,44 @@ def load_instance_payload(path: str | Path) -> dict[str, Any]:
             raise ValueError("demand_kg must be non-negative")
     clustered = [row for row in customers if isinstance(row, dict) and row.get("cluster_id") is not None]
     if clustered and len(clustered) != len(customers):
-        raise ValueError("cluster_id must be provided for all customers or none")
+        raise ValueError("cluster_id must be provided for all stores or none")
     return payload
 
 
 def import_instance_payload(payload_path: str | Path, run_dir: str | Path) -> Path:
-    payload = load_instance_payload(payload_path)
+    payload = dict(load_instance_payload(payload_path))
+    payload.pop("clustering_method", None)
     run_root = Path(run_dir).expanduser().resolve()
     layout = ensure_run_subdirs(run_root)
-    customers = sorted(payload["customers"], key=lambda row: int(row["client_num"]))
+    customers = sorted(payload.get("stores") or payload.get("customers"), key=lambda row: int(row["client_num"]))
+    internal_customers = []
+    for row in customers:
+        copy = dict(row)
+        if copy.get("customer_id") is None and copy.get("store_id") is not None:
+            copy["customer_id"] = copy.get("store_id")
+        if copy.get("customer_name") is None and copy.get("store_name") is not None:
+            copy["customer_name"] = copy.get("store_name")
+        internal_customers.append(copy)
     demand_rows = payload["demand_rows"]
+    internal_demand_rows = []
+    for row in demand_rows:
+        copy = dict(row)
+        if copy.get("customer_id") is None and copy.get("store_id") is not None:
+            copy["customer_id"] = copy.get("store_id")
+        internal_demand_rows.append(copy)
     warehouse = payload["warehouse"]
     warehouse_lat = float(warehouse["latitude"])
     warehouse_lon = float(warehouse["longitude"])
 
     write_json(run_root / "prep" / "instance" / "payload.json", payload)
-    write_json(run_root / "prep" / "instance" / "customers.json", {"customers": customers})
+    write_json(run_root / "prep" / "instance" / "customers.json", {"customers": internal_customers})
     write_json(run_root / "prep" / "instance" / "manifest.json", {
         "schema_version": 1,
         "instance_id": payload.get("instance_id") or run_root.name,
         "customer_count": len(customers),
         "demand_row_count": len(demand_rows),
     })
-    write_table(run_root / "prep" / "instance" / "demand_long.json", ["delivery_date", "client_num", "customer_id", "demand_kg"], demand_rows)
+    write_table(run_root / "prep" / "instance" / "demand_long.json", ["delivery_date", "client_num", "customer_id", "demand_kg"], internal_demand_rows)
 
     features = []
     for row in customers:
@@ -118,7 +135,7 @@ def import_instance_payload(payload_path: str | Path, run_dir: str | Path) -> Pa
         lon = float(row["longitude"])
         positions[client_num] = (lat, lon)
         coordinates_rows.append({"node_index": client_num, "latitude": lat, "longitude": lon})
-        mapping_rows.append({"customer_id": str(row.get("customer_id") or client_num), "client_num": client_num})
+        mapping_rows.append({"customer_id": str(row.get("customer_id") or row.get("store_id") or client_num), "client_num": client_num})
 
     demand_by_date: dict[str, dict[int, float]] = defaultdict(lambda: defaultdict(float))
     for row in demand_rows:
@@ -153,14 +170,13 @@ def import_instance_payload(payload_path: str | Path, run_dir: str | Path) -> Pa
     for row in customers:
         if row.get("cluster_id") is None:
             continue
-        assignments.append({"client_num": int(row["client_num"]), "customer_id": row.get("customer_id"), "cluster_id": int(row["cluster_id"])})
+        assignments.append({"client_num": int(row["client_num"]), "customer_id": row.get("customer_id") or row.get("store_id"), "cluster_id": int(row["cluster_id"])})
     if assignments:
         write_json(run_root / "prep" / "clustering" / "assignments.json", {"assignments": assignments})
         write_table(run_root / "prep" / "clustering" / "cluster_assignments.json", ["client_num", "customer_id", "cluster_id"], assignments)
 
     merge_run_config(run_root, {
         "instance_id": payload.get("instance_id") or run_root.name,
-        "clustering_method": payload.get("clustering_method") or ("manual" if assignments else "geographic"),
         "last_stage": "import_instance",
     })
     try:
@@ -171,5 +187,5 @@ def import_instance_payload(payload_path: str | Path, run_dir: str | Path) -> Pa
 
 
 def payload_has_cluster_assignments(payload: dict[str, Any]) -> bool:
-    customers = payload.get("customers") if isinstance(payload, dict) else []
+    customers = (payload.get("stores") or payload.get("customers")) if isinstance(payload, dict) else []
     return bool(customers) and all(isinstance(row, dict) and row.get("cluster_id") is not None for row in customers)

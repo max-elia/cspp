@@ -199,7 +199,7 @@
 	}
 
 	function labelOf(feature: FeatureCollection['features'][number]): string {
-		return String(feature.properties.customer_name ?? feature.properties.customer_id ?? feature.properties.client_num ?? 'Store');
+		return String(feature.properties.store_name ?? feature.properties.customer_name ?? feature.properties.store_id ?? feature.properties.customer_id ?? feature.properties.client_num ?? 'Store');
 	}
 
 	function formatDemand(value: number): string {

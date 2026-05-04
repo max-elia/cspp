@@ -50,6 +50,8 @@
 
 	type PrepCustomerRow = {
 		client_num: number;
+		store_id?: string | null;
+		store_name?: string | null;
 		customer_id?: string | null;
 		customer_name?: string | null;
 		street?: string | null;
@@ -74,14 +76,14 @@
 
 	type ClusteringMethod = 'kmeans' | 'depot_regularized_kmeans' | 'hierarchical_ward' | 'angular_gap';
 	type SourceMode = 'upload' | 'create_existing' | null;
-	type SetupStep = 'source' | 'customers' | 'clustering';
+	type SetupStep = 'source' | 'stores' | 'clustering';
 	type ServerRunEntry = {
 		run_id?: string | null;
 	};
 
 	const TARGET_CLUSTER_SIZE = 16;
 	const CLUSTER_ANIMATION_MS = 360;
-	const workflowSteps: SetupStep[] = ['source', 'customers', 'clustering'];
+	const workflowSteps: SetupStep[] = ['source', 'stores', 'clustering'];
 	const DEFAULT_CSPP_PARAMS: CsppParameterConfig = {
 		d_cost: 0.25,
 		h: 50,
@@ -140,8 +142,6 @@
 	const mapDemandRows = $derived($appState.mapDemandRows as MapDemandRow[]);
 	const features = $derived(mapData?.features ?? []);
 	const typedSummary = $derived((summary as MapSummary | null) ?? null);
-	const sourceRunIsInstance = $derived.by(() => Boolean(overview?.instance_setup));
-
 	const warehouse = $derived.by(() => {
 		const latitude = Number(typedSummary?.warehouse?.latitude);
 		const longitude = Number(typedSummary?.warehouse?.longitude);
@@ -339,19 +339,6 @@
 		});
 	}
 
-	function clearAssignmentsFromFeatures(
-		sourceFeatures: FeatureCollection['features']
-	): FeatureCollection['features'] {
-		return sourceFeatures.map((feature) => ({
-			...feature,
-			properties: {
-				...propsOf(feature),
-				cluster_id: null,
-				super_cluster_id: null
-			}
-		}));
-	}
-
 	function buildPrepCustomers(sourceFeatures: FeatureCollection['features']): PrepCustomerRow[] {
 		return sourceFeatures.map((feature) => {
 			const properties = propsOf(feature);
@@ -543,8 +530,8 @@
 			},
 			properties: {
 				client_num: customer.client_num,
-				customer_id: customer.customer_id ?? null,
-				customer_name: customer.customer_name ?? null,
+				customer_id: customer.customer_id ?? customer.store_id ?? null,
+				customer_name: customer.customer_name ?? customer.store_name ?? null,
 				address: customer.street ?? null,
 				postal_code: customer.postal_code ?? null,
 				city: customer.city ?? null,
@@ -570,7 +557,7 @@
 			client_num: customer.client_num,
 			customer_id: customer.customer_id ?? undefined,
 			cluster_id: customer.cluster_id as number,
-			super_cluster_id: customer.super_cluster_id ?? 0
+			super_cluster_id: customer.super_cluster_id ?? (customer.cluster_id as number)
 		}));
 	}
 
@@ -581,8 +568,9 @@
 		warehouseLocation: WarehouseLocation | null;
 	} {
 		const payload = JSON.parse(text) as InstanceBundle;
-		if (!Array.isArray(payload.customers) || payload.customers.length < 1) {
-			throw new Error('Bundle must include a non-empty stores/customers array.');
+		const stores = Array.isArray(payload.stores) ? payload.stores : payload.customers;
+		if (!Array.isArray(stores) || stores.length < 1) {
+			throw new Error('Bundle must include a non-empty stores array.');
 		}
 		if (!Array.isArray(payload.demand_rows)) {
 			throw new Error('Bundle must include a demand_rows array.');
@@ -595,17 +583,17 @@
 				? { latitude: warehouseLatitude, longitude: warehouseLongitude }
 				: null;
 
-		const prepCustomers = payload.customers.map((customer: InstanceBundleCustomer) => {
+		const prepCustomers = stores.map((customer: InstanceBundleCustomer) => {
 			const latitude = Number(customer.latitude);
 			const longitude = Number(customer.longitude);
 			const clientNum = Number(customer.client_num);
 			if (!Number.isFinite(clientNum) || !Number.isFinite(latitude) || !Number.isFinite(longitude)) {
-				throw new Error('Bundle stores/customers must include valid client_num, latitude, and longitude values.');
+				throw new Error('Bundle stores must include valid client_num, latitude, and longitude values.');
 			}
 			return {
 				client_num: clientNum,
-				customer_id: customer.customer_id ?? null,
-				customer_name: customer.customer_name ?? null,
+				customer_id: customer.customer_id ?? customer.store_id ?? null,
+				customer_name: customer.customer_name ?? customer.store_name ?? null,
 				street: customer.street ?? null,
 				postal_code: customer.postal_code ?? null,
 				city: customer.city ?? null,
@@ -682,9 +670,16 @@
 							longitude: warehouseLocation.longitude
 						}
 					: null,
-				customers: prepCustomers,
+				stores: prepCustomers.map(({ customer_id, customer_name, ...customer }) => ({
+					...customer,
+					store_id: customer_id,
+					store_name: customer_name
+				})),
 				demand_rows: buildDemandRowsPayload(demandRows),
-				assignments: assignmentRows,
+				assignments: assignmentRows.map(({ customer_id, ...row }) => ({
+					...row,
+					store_id: customer_id
+				})),
 				instance_setup: instanceSetupPayload,
 				map_features: mapFeatures
 			})
@@ -740,11 +735,7 @@
 	const includedBaseFeatures = $derived.by(() =>
 		features.filter((feature) => includedClientNums.has(asFiniteNumber(propsOf(feature).client_num)))
 	);
-	const clusteringSourceFeatures = $derived.by(() =>
-		sourceMode === 'create_existing' && sourceRunIsInstance
-			? clearAssignmentsFromFeatures(includedBaseFeatures)
-			: includedBaseFeatures
-	);
+	const clusteringSourceFeatures = $derived.by(() => includedBaseFeatures);
 	const selectedMapData = $derived.by(
 		(): FeatureCollection => ({
 			type: 'FeatureCollection',
@@ -820,6 +811,26 @@
 					.filter((entry): entry is readonly [number, number] => entry !== null)
 			)
 	);
+	const predefinedAssignments = $derived.by((): AssignmentRow[] =>
+		clusteringSourceFeatures
+			.map((feature): AssignmentRow | null => {
+				const properties = propsOf(feature);
+				const clientNum = asFiniteNumber(properties.client_num);
+				const clusterId = clusterValue(properties.cluster_id);
+				if (!Number.isFinite(clientNum) || clusterId === null) return null;
+				return {
+					client_num: clientNum,
+					customer_id: typeof properties.customer_id === 'string' ? properties.customer_id : undefined,
+					cluster_id: clusterId,
+					super_cluster_id: clusterValue(properties.super_cluster_id) ?? clusterId
+				};
+			})
+			.filter((row): row is AssignmentRow => row !== null)
+	);
+	const hasCompletePredefinedAssignments = $derived.by(
+		() => includedCustomerCount > 0 && predefinedAssignments.length === includedCustomerCount
+	);
+	const canCreateInstance = $derived.by(() => previewIsFresh || hasCompletePredefinedAssignments);
 	const displayedClusterMap = $derived.by(() => new Map(displayedAssignments.map((row) => [row.client_num, row.cluster_id])));
 	const clusteringStepClusterMap = $derived.by(() =>
 		displayedAssignments.length ? displayedClusterMap : selectedBaseClusterMap
@@ -852,8 +863,8 @@
 	$effect(() => {
 		const requestedStep = page.url.searchParams.get('step');
 		if (!runId || (sourceMode !== 'create_existing' && sourceMode !== 'upload')) return;
-		if (requestedStep === 'customers' && features.length) {
-			activeStep = 'customers';
+		if ((requestedStep === 'stores' || requestedStep === 'customers') && features.length) {
+			activeStep = 'stores';
 		}
 		if (requestedStep === 'clustering' && includedCustomerCount > 0) {
 			activeStep = 'clustering';
@@ -970,7 +981,7 @@
 	function goToStep(step: SetupStep): void {
 		if (!workflowSteps.includes(step)) return;
 		const canFilter = sourceMode === 'create_existing' || sourceMode === 'upload';
-		if (step === 'customers' && !canFilter) return;
+		if (step === 'stores' && !canFilter) return;
 		if (step === 'clustering' && (!canFilter || includedCustomerCount < 1)) return;
 		activeStep = step;
 		const url = new URL(page.url);
@@ -999,10 +1010,10 @@
 		sourceMode = 'create_existing';
 		if (!targetRunId) return;
 		if (targetRunId === runId) {
-			goToStep('customers');
+			goToStep('stores');
 			return;
 		}
-		await goto(`/instances/new?source=${encodeURIComponent(targetRunId)}&step=customers`);
+		await goto(`/instances/new?source=${encodeURIComponent(targetRunId)}&step=stores`);
 	}
 
 	async function handleBundleFileChange(event: Event): Promise<void> {
@@ -1191,8 +1202,8 @@
 			createStatus = 'Select at least one store.';
 			return;
 		}
-		if (!displayedAssignments.length) {
-			createStatus = 'Run clustering for the current selection before creating the instance.';
+		if (!canCreateInstance) {
+			createStatus = 'Run clustering or provide cluster IDs for every selected store before creating the instance.';
 			return;
 		}
 		if (serverRunIds.includes(targetRunId)) {
@@ -1204,34 +1215,38 @@
 		createStatus = 'Creating instance...';
 
 		try {
-			const mapFeatures = applyAssignmentsToFeatures(clusteringSourceFeatures, displayedAssignments, true);
+			const usesPreviewAssignments = previewIsFresh;
+			const assignmentRows = usesPreviewAssignments ? displayedAssignments : predefinedAssignments;
+			const mapFeatures = applyAssignmentsToFeatures(clusteringSourceFeatures, assignmentRows, true);
 			const prepCustomers = buildPrepCustomers(mapFeatures);
-			const clusterCountValue = new Set(displayedAssignments.map((row) => row.cluster_id)).size;
-			const clusteringMethodValue = pipelineClusteringMethod(clusteringMethod);
+			const clusterCountValue = new Set(assignmentRows.map((row) => row.cluster_id)).size;
+			const clusteringMethodValue = usesPreviewAssignments ? pipelineClusteringMethod(clusteringMethod) : null;
 			const instanceSetupPayload = {
 					source_run_id: runId,
 					max_distance_from_warehouse_km: activeRadiusKm,
 					radius_enabled: useRadius,
-					included_customer_count: prepCustomers.length,
-					excluded_customer_count: Math.max(0, features.length - prepCustomers.length),
+					included_store_count: prepCustomers.length,
+					excluded_store_count: Math.max(0, features.length - prepCustomers.length),
 					manually_excluded_client_nums: Array.from(manualExcludedClientNums).sort((a, b) => a - b),
 					manually_included_client_nums: Array.from(manualIncludedClientNums).sort((a, b) => a - b),
-					included_customer_ids: prepCustomers.map((customer) => customer.customer_id).filter(Boolean),
-					included_customers: prepCustomers.map((customer) => ({
+					included_store_ids: prepCustomers.map((customer) => customer.customer_id).filter(Boolean),
+					included_stores: prepCustomers.map((customer) => ({
 						client_num: customer.client_num,
-						customer_id: customer.customer_id,
-						customer_name: customer.customer_name
+						store_id: customer.customer_id,
+						store_name: customer.customer_name
 					})),
 					clustering: {
-						method: clusteringMethod,
-						method_label: demandAwareClustering ? `${clusteringMethod}_demand_aware` : clusteringMethod,
-						demand_aware: demandAwareClustering,
+						method: usesPreviewAssignments ? clusteringMethod : 'predefined',
+						method_label: usesPreviewAssignments
+							? (demandAwareClustering ? `${clusteringMethod}_demand_aware` : clusteringMethod)
+							: 'predefined_cluster_ids',
+						demand_aware: usesPreviewAssignments ? demandAwareClustering : null,
 						cluster_count: clusterCountValue,
-						target_cluster_size: clusterSize,
-						seed: previewSeed,
-						tree_height: previewHeight,
-						iterations: previewIteration,
-						converged: previewConverged,
+						target_cluster_size: usesPreviewAssignments ? clusterSize : null,
+						seed: usesPreviewAssignments ? previewSeed : null,
+						tree_height: usesPreviewAssignments ? previewHeight : null,
+						iterations: usesPreviewAssignments ? previewIteration : null,
+						converged: usesPreviewAssignments ? previewConverged : null,
 						confirmed_at: new Date().toISOString()
 					}
 				};
@@ -1241,7 +1256,7 @@
 				prepCustomers,
 				demandRows: filteredDemandRows,
 				mapFeatures,
-				assignmentRows: displayedAssignments,
+				assignmentRows,
 				warehouseLocation: warehouse,
 				clusteringMethodValue,
 				maxDistanceFromWarehouseKm: activeRadiusKm,
@@ -1282,35 +1297,10 @@
 
 			const mapFeatures = buildFeaturesFromPrepCustomers(prepCustomers);
 			const uniqueClusters = new Set(assignmentRows.map((row) => row.cluster_id)).size;
-			await persistInstanceRun({
-				targetRunId,
-				sourceRunId: bundle.source_run_id ?? null,
-				prepCustomers,
-				demandRows,
-				mapFeatures,
-				assignmentRows,
-				warehouseLocation,
-				clusteringMethodValue: bundle.clustering_method ?? 'imported_bundle',
-				maxDistanceFromWarehouseKm:
-					typeof bundle.max_distance_from_warehouse_km === 'number' ? bundle.max_distance_from_warehouse_km : null,
-				instanceSetupPayload: {
-					source_run_id: bundle.source_run_id ?? null,
-					import_mode: 'bundle',
-					import_bundle_name: file.name,
-					generated_at: bundle.generated_at ?? null,
-					warehouse: warehouseLocation,
-					included_customer_count: prepCustomers.length,
-					excluded_customer_count: 0,
-					manually_excluded_client_nums: [],
-					included_customer_ids: prepCustomers.map((customer) => customer.customer_id).filter(Boolean),
-					included_customers: prepCustomers.map((customer) => ({
-						client_num: customer.client_num,
-						customer_id: customer.customer_id,
-						customer_name: customer.customer_name
-					})),
-					clustering: {
-						method: bundle.clustering_method ?? 'imported_bundle',
-						method_label: bundle.clustering_method ?? 'imported_bundle',
+			const importedClustering = assignmentRows.length
+				? {
+						method: 'predefined',
+						method_label: 'predefined_cluster_ids',
 						demand_aware: null,
 						cluster_count: uniqueClusters,
 						target_cluster_size: null,
@@ -1320,8 +1310,36 @@
 						converged: null,
 						confirmed_at: bundle.generated_at ?? null
 					}
+				: null;
+			await persistInstanceRun({
+				targetRunId,
+				sourceRunId: bundle.source_run_id ?? null,
+				prepCustomers,
+				demandRows,
+				mapFeatures,
+				assignmentRows,
+				warehouseLocation,
+				clusteringMethodValue: null,
+				maxDistanceFromWarehouseKm:
+					typeof bundle.max_distance_from_warehouse_km === 'number' ? bundle.max_distance_from_warehouse_km : null,
+				instanceSetupPayload: {
+					source_run_id: bundle.source_run_id ?? null,
+					import_mode: 'bundle',
+					import_bundle_name: file.name,
+					generated_at: bundle.generated_at ?? null,
+					warehouse: warehouseLocation,
+					included_store_count: prepCustomers.length,
+					excluded_store_count: 0,
+					manually_excluded_client_nums: [],
+					included_store_ids: prepCustomers.map((customer) => customer.customer_id).filter(Boolean),
+					included_stores: prepCustomers.map((customer) => ({
+						client_num: customer.client_num,
+						store_id: customer.customer_id,
+						store_name: customer.customer_name
+					})),
+					clustering: importedClustering
 				},
-				navigateTo: `/instances/new?step=customers`
+				navigateTo: `/instances/new?step=stores`
 			});
 		} catch (error) {
 			importStatus = error instanceof Error ? error.message : String(error);
@@ -1342,11 +1360,11 @@
 			<button
 				type="button"
 				class:active={activeStep === step}
-				class:locked={(step === 'customers' && sourceMode !== 'create_existing' && sourceMode !== 'upload') || (step === 'clustering' && ((sourceMode !== 'create_existing' && sourceMode !== 'upload') || includedCustomerCount < 1))}
+				class:locked={(step === 'stores' && sourceMode !== 'create_existing' && sourceMode !== 'upload') || (step === 'clustering' && ((sourceMode !== 'create_existing' && sourceMode !== 'upload') || includedCustomerCount < 1))}
 				onclick={() => goToStep(step)}
 			>
 				<span>{index + 1}</span>
-				<strong>{step === 'source' ? 'Source' : step === 'customers' ? 'Filtering' : 'Clustering'}</strong>
+				<strong>{step === 'source' ? 'Source' : step === 'stores' ? 'Filtering' : 'Clustering'}</strong>
 			</button>
 		{/each}
 	</div>
@@ -1398,7 +1416,7 @@
 	</section>
 {/if}
 
-{#if activeStep === 'customers'}
+{#if activeStep === 'stores'}
 	<section class="panel stack">
 		<div class="step-header">
 			<div>
@@ -1592,8 +1610,8 @@
 		</div>
 
 		<div class="step-actions">
-			<button type="button" onclick={() => goToStep('customers')}>Back</button>
-			<button class="primary-action" type="button" onclick={() => void createClusteredInstance()} disabled={!previewIsFresh || isRunningClustering || isCreating}>
+			<button type="button" onclick={() => goToStep('stores')}>Back</button>
+			<button class="primary-action" type="button" onclick={() => void createClusteredInstance()} disabled={!canCreateInstance || isRunningClustering || isCreating}>
 				{isCreating ? 'Creating...' : 'Create Instance'}
 			</button>
 			{#if createStatus}

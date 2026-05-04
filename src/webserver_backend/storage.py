@@ -277,7 +277,7 @@ def list_instances_from_manifests() -> dict[str, Any]:
                 "source_instance_id": manifest.get("source_instance_id"),
                 "clustering_method": manifest.get("clustering_method") or payload.get("clustering_method"),
                 "max_distance_from_warehouse_km": manifest.get("max_distance_from_warehouse_km") or payload.get("max_distance_from_warehouse_km"),
-                "customer_count": manifest.get("customer_count") or len(payload.get("customers") or []),
+                "customer_count": manifest.get("customer_count") or len(payload.get("stores") or payload.get("customers") or []),
                 "demand_row_count": manifest.get("demand_row_count") or len(payload.get("demand_rows") or []),
                 "latest_run_id": runs[0]["run_id"] if runs else None,
                 "run_count": len(runs),

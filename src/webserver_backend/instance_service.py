@@ -15,6 +15,76 @@ from . import storage
 from .run_service import delete_run
 
 
+def _payload_stores(payload: dict[str, object]) -> list[object]:
+    stores = payload.get("stores")
+    if isinstance(stores, list):
+        return stores
+    customers = payload.get("customers")
+    return customers if isinstance(customers, list) else []
+
+
+def _internal_customer_rows(stores: list[object]) -> list[object]:
+    rows: list[object] = []
+    for row in stores:
+        if not isinstance(row, dict):
+            rows.append(row)
+            continue
+        copy = dict(row)
+        if copy.get("customer_id") is None and copy.get("store_id") is not None:
+            copy["customer_id"] = copy.get("store_id")
+        if copy.get("customer_name") is None and copy.get("store_name") is not None:
+            copy["customer_name"] = copy.get("store_name")
+        rows.append(copy)
+    return rows
+
+
+def _cluster_assignments_from_stores(stores: list[object]) -> list[dict[str, object]]:
+    clustered = [row for row in stores if isinstance(row, dict) and row.get("cluster_id") is not None]
+    if not clustered:
+        return []
+    if len(clustered) != len(stores):
+        raise HTTPException(status_code=400, detail="cluster_id must be provided for every store or for none")
+    assignments: list[dict[str, object]] = []
+    for row in clustered:
+        client_num = pipeline_jobs.safe_int(row.get("client_num"))
+        cluster_id = pipeline_jobs.safe_int(row.get("cluster_id"))
+        if client_num is None or cluster_id is None:
+            raise HTTPException(status_code=400, detail="cluster_id assignments need valid client_num and cluster_id")
+        assignments.append(
+            {
+                "client_num": client_num,
+                "store_id": row.get("store_id") or row.get("customer_id"),
+                "cluster_id": cluster_id,
+            }
+        )
+    return assignments
+
+
+def _validated_assignments(stores: list[object], raw_assignments: object) -> list[dict[str, object]]:
+    if isinstance(raw_assignments, list) and raw_assignments:
+        assignments = [row for row in raw_assignments if isinstance(row, dict)]
+        for row in assignments:
+            if pipeline_jobs.safe_int(row.get("client_num")) is None or pipeline_jobs.safe_int(row.get("cluster_id")) is None:
+                raise HTTPException(status_code=400, detail="assignments need valid client_num and cluster_id")
+        store_client_nums = {
+            client_num
+            for row in stores
+            if isinstance(row, dict)
+            for client_num in [pipeline_jobs.safe_int(row.get("client_num"))]
+            if client_num is not None
+        }
+        assignment_client_nums = {
+            client_num
+            for row in assignments
+            for client_num in [pipeline_jobs.safe_int(row.get("client_num"))]
+            if client_num is not None
+        }
+        if assignment_client_nums != store_client_nums:
+            raise HTTPException(status_code=400, detail="assignments must cover every store or be omitted")
+        return assignments
+    return _cluster_assignments_from_stores(stores)
+
+
 def _instance_runs(instance_id: str) -> list[dict[str, Any]]:
     for row in storage.list_instances_from_manifests()["instances"]:
         if str(row.get("instance_id") or "") == instance_id:
@@ -31,7 +101,8 @@ def _persist_instance_payload(
 ) -> Path:
     instance_root = storage.instance_dir(instance_id)
     instance_root.mkdir(parents=True, exist_ok=True)
-    customers = payload.get("customers") if isinstance(payload.get("customers"), list) else []
+    customers = _payload_stores(payload)
+    internal_customers = _internal_customer_rows(customers)
     demand_rows = payload.get("demand_rows") if isinstance(payload.get("demand_rows"), list) else []
     manifest = {
         "instance_id": instance_id,
@@ -47,12 +118,12 @@ def _persist_instance_payload(
     storage.write_json(instance_root / "manifest.json", manifest)
     storage.write_json(instance_root / "prep" / "instance" / "manifest.json", manifest)
     storage.write_json(instance_root / "prep" / "instance" / "payload.json", payload)
-    storage.write_json(instance_root / "prep" / "instance" / "customers.json", {"updated_at": storage.now_iso(), "customers": customers})
-    storage.write_json(
-        instance_root / "prep" / "clustering" / "assignments.json",
-        {"updated_at": storage.now_iso(), "instance_id": instance_id, "assignments": assignments},
-    )
+    storage.write_json(instance_root / "prep" / "instance" / "customers.json", {"updated_at": storage.now_iso(), "customers": internal_customers})
     if assignments:
+        storage.write_json(
+            instance_root / "prep" / "clustering" / "assignments.json",
+            {"updated_at": storage.now_iso(), "instance_id": instance_id, "assignments": assignments},
+        )
         normalized = []
         for row in assignments:
             client_num = pipeline_jobs.safe_int(row.get("client_num"))
@@ -85,10 +156,10 @@ def create_instance(payload: dict[str, object]) -> dict[str, Any]:
     while storage.instance_dir(instance_id).exists():
         instance_id = f"{requested_id}_{counter}"
         counter += 1
-    customers = payload.get("customers")
+    customers = _payload_stores(payload)
     demand_rows = payload.get("demand_rows")
     if not isinstance(customers, list) or not customers:
-        raise HTTPException(status_code=400, detail="customers must be a non-empty list")
+        raise HTTPException(status_code=400, detail="stores must be a non-empty list")
     if not isinstance(demand_rows, list):
         raise HTTPException(status_code=400, detail="demand_rows must be a list")
     instance_payload = {
@@ -99,10 +170,10 @@ def create_instance(payload: dict[str, object]) -> dict[str, Any]:
         "max_distance_from_warehouse_km": payload.get("max_distance_from_warehouse_km"),
         "clustering_method": payload.get("clustering_method"),
         "warehouse": payload.get("warehouse"),
-        "customers": customers,
+        "stores": customers,
         "demand_rows": demand_rows,
     }
-    assignments = payload.get("assignments") if isinstance(payload.get("assignments"), list) else []
+    assignments = _validated_assignments(customers, payload.get("assignments"))
     instance_root = _persist_instance_payload(
         instance_id=instance_id,
         source_instance_id=str(payload.get("source_instance_id") or "").strip() or None,

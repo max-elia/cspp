@@ -13,7 +13,7 @@ from . import storage
 
 
 def upload_instance_json(*, run_id: str, kind: str, filename: str, data: bytes) -> dict[str, Any]:
-    allowed = {"customers", "demand_long", "cluster_assignments", "frontend_manifest"}
+    allowed = {"stores", "customers", "demand_long", "cluster_assignments", "frontend_manifest"}
     if kind not in allowed:
         raise HTTPException(status_code=400, detail=f"kind must be one of: {', '.join(sorted(allowed))}")
     suffix = Path(filename or "").suffix or ".json"
