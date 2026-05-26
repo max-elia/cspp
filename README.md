@@ -1,16 +1,40 @@
-# CSPP
+# Charging Station Placement Planning
 
-This repository contains the public code for a three-stage charging station planning pipeline and its web app.
+This repository contains a self-hostable planning tool for deciding where retail
+delivery networks should install electric truck charging stations. It combines a
+web dashboard with a command-line pipeline so planners can upload historic
+delivery data, set their own cost and vehicle parameters, run the optimization,
+and inspect the resulting charger placement and delivery routes.
 
 Thesis PDF: [`thesis.pdf`](thesis.pdf)
 
-Pipeline stages:
+The tool is built around a three-stage robust planning workflow:
 
-1. **Cluster solve**: solve first-stage charger decisions on store clusters.
-2. **Scenario evaluation**: evaluate the combined first-stage solution on demand scenarios.
-3. **Cluster reoptimization**: iteratively improve cluster-level charger decisions.
+1. **Cluster solve**: split stores into manageable groups and solve first-stage
+   charger decisions on each cluster.
+2. **Scenario evaluation**: evaluate the combined charger placement on historic
+   demand scenarios.
+3. **Cluster reoptimization**: improve cluster-level charger decisions against
+   the evaluated upper-bound costs.
 
 The repository intentionally excludes private raw delivery data, thesis sources, full-instance evaluation experiments, and alternative reoptimization method variants.
+
+## Planning Workflow
+
+The intended workflow mirrors a retailer's planning task:
+
+1. **Create an instance** from a single JSON file containing the warehouse,
+   stores, and historic demand observations.
+2. **Filter and cluster stores** before solving. The web app provides a map
+   preview so different clustering methods and group sizes can be compared.
+3. **Choose planning parameters**, including vehicle type, charger costs,
+   electricity price, waiting cost, truck fixed cost, scenario count, and the
+   compute runtime.
+4. **Run the solver** locally or on a configured SSH runtime. The dashboard
+   tracks stage progress, elapsed time, runtime estimates, and live optimization
+   charts.
+5. **Review results** on an interactive map with selected charger locations,
+   scenario routes, and per-cluster runtime details.
 
 ## Requirements
 
@@ -42,7 +66,27 @@ pnpm install
 
 ## Instance Data
 
-The supported public input format is a single JSON instance payload. See:
+The supported public input format is a single JSON instance payload. It contains
+the depot location, delivery locations, and one demand row per store and delivery
+day. Cluster assignments are optional; if they are omitted, the app can create
+clusters during setup.
+
+Required top-level fields:
+
+- `schema_version`: current schema version, set to `1`.
+- `warehouse`: depot location with `latitude` and `longitude`.
+- `stores`: delivery locations. Each store needs a positive integer
+  `client_num`, `latitude`, and `longitude`.
+- `demand_rows`: historic demand observations with `delivery_date`,
+  `client_num`, and non-negative `demand_kg`.
+
+Useful optional store fields include `store_id`, `store_name`, and address
+fields, which make the map views easier to inspect but are not required by the
+solver. For robust planning, include demand days that represent operationally
+difficult patterns, not only an average week: high total demand, many active
+stores, broad geographic spread, or known peak conditions are useful scenarios.
+
+Format references and examples:
 
 - [`docs/instance-format.md`](docs/instance-format.md)
 - [`schemas/instance-payload.schema.json`](schemas/instance-payload.schema.json)
@@ -94,7 +138,9 @@ Outputs are written to `exports/runs/<run-name>/`.
 
 ## Run The Web App
 
-The web app uses a FastAPI backend plus a SvelteKit frontend.
+The web app is the main operational interface. It guides users through instance
+creation, clustering preview, parameter selection, solve progress, and result
+review. It uses a FastAPI backend plus a SvelteKit frontend.
 
 Start the backend:
 
@@ -115,7 +161,9 @@ Open `http://localhost:5173`. The frontend talks to the backend at `http://127.0
 
 ## Web App Runtime Delegation
 
-The web app can run several experiments on different compute targets. Configure those targets in `configs/cspp_runtimes.json`.
+Optimization runs can be computationally heavy, so the web app can dispatch
+several experiments to different compute targets. Configure those targets in
+`configs/cspp_runtimes.json`.
 
 - `local` runtimes execute from this checkout and write results under `var/webserver/exports`.
 - `ssh` runtimes sync a prepared run to a remote project folder, start the pipeline there, poll status, and sync finished artifacts back.
@@ -150,11 +198,13 @@ An SSH runtime entry has this shape:
 
 ## Screenshots
 
-Create a new instance and inspect the generated clustering before running the solver:
+Create a new instance and inspect alternative clustering results before running
+the solver:
 
 ![Web app new instance clustering](docs/images/webapp-new-instance-clustering.png)
 
-Track a running solve with stage progress, runtime estimates, and live optimization charts:
+Track a running solve with stage progress, runtime estimates, and live
+optimization charts:
 
 ![Web app solver progress](docs/images/webapp-solver-progress-running.png)
 
@@ -171,4 +221,6 @@ Track a running solve with stage progress, runtime estimates, and live optimizat
 
 ## Notes
 
-The demo data is generated and intended for smoke tests and UI exploration. Full optimization runs require a working Gurobi installation and can take substantial time depending on instance size, scenario count, and hardware.
+The demo data is generated and intended for smoke tests and UI exploration. Full
+optimization runs require a working Gurobi installation and can take substantial
+time depending on instance size, scenario count, clustering choice, and hardware.
